@@ -69,7 +69,8 @@ AI coding agents are powerful but inconsistent. They skip planning, forget domai
 
 ```bash
 # Install all skills into your project (one-time)
-npx skills@latest add ByronFinn/dev-skills
+# Adjust the path to this modified checkout
+npx skills@latest add ../dev-skills-main --skill "*" --copy
 
 # In your repo, configure skill behavior (one-time)
 /setup-project
@@ -80,17 +81,34 @@ npx skills@latest add ByronFinn/dev-skills
 
 That's it. Each skill is triggered by a **slash command** and stops when done — skills never auto-chain. You decide when to move to the next step.
 
+For this modified checkout, install from the local directory in your target project rather than installing the unchanged upstream repository (adjust the path to your checkout):
+
+```powershell
+npx skills@latest add ../dev-skills-main --skill "*" --copy
+```
+
+This installs the whole set, including shared rules and the built-in RuoYi profile; no separate `ry-coding` installation or invocation is needed. Run `/setup-project` in the target project: it supports **Gitee** through a connected official MCP or OpenAPI v5 and registers the built-in `ruoyi-plus-dev` profile in `docs/agents/coding-standards.md` for confirmed RuoYi projects. Existing planning, implementation, debugging, TDD and review workflows read the original rules through that registration. Source paths and build commands are verified against the target project. No Gitee account or MCP is connected automatically; remote writes require the configured access.
+
+Missing required rules block affected code changes and compliance approval. Failed or unavailable required verification leaves a task unfinished. Planning and TDD RED phases retain their stage boundaries; read-only reviews may report findings but must withhold an unqualified pass when required evidence is missing.
+
+Gitee, GitHub and GitLab share the same tracker configuration interface: workflows such as `story` keep their existing steps and use `docs/agents/issue-tracker.md` to select platform operations. The team's RuoYi conventions integrate into those workflows as scoped technical context.
+
+The `ruoyi-plus-dev` package includes the [complete original team standard](skills/ruoyi-plus-dev/references/ry-coding.md), preserved verbatim. Its English entry/reference handles integration and requires reading the original rules. All seven sections, the four-step development procedure and six delivery checks are retained; source paths refer to the target RuoYi project root.
+
+After publishing this modified repository to Gitee, install using its full Git URL, for example `npx skills add https://gitee.com/YOUR_TEAM/dev-skills.git` (replace the team/repository; private repositories use existing Git credentials). The `owner/repo` shorthand defaults to GitHub. Full `.git` URL skill discovery was verified against Gitee's official skill repository with `skills@1.7.4`; cloning and installing locally is also supported.
+
 ---
 
 ## 🧰 Skills Overview
 
-> **12 task skills** covering the full engineering lifecycle: planning → research → validation → breakdown → implementation → review → debugging → maintenance → writing.
+> **12 task skills + 1 optional technical profile** covering the full engineering lifecycle: planning → research → validation → breakdown → implementation → review → debugging → maintenance → writing.
 >
 > They ship with one extra unit: `rules/` — the shared cross-skill bundle (anti-patterns, entry protocol, sub-agent runtime, authoring discipline, engineering principles). It is **not a task skill** and is `disable-model-invocation`; it exists so the installer carries the shared rules along and the skills' cross-references keep resolving after installation.
 
 | Skill | Command | Input → Output | Description |
 |---|---|---|---|
 | **setup-project** | `/setup-project` | Repo state → `docs/agents/` config | One-time scaffold: issue tracker, triage labels, domain doc layout, repo map. Re-run when project structure changes. |
+| **ruoyi-plus-dev** | `/ruoyi-plus-dev` or project config | RuoYi task → Conventions + verification evidence | Optional team profile for RuoYi-Vue-Plus 6.X Java, plus-ui Vue/TS and SQL; supplements existing workflows. |
 | **think** | `/think` | Rough idea → PRD (`docs/prd/`) | Brainstorm → converge to a decision-complete plan. One question at a time with a recommended answer. |
 | **research** | `/research` | Stack×topic question → Immutable record + INDEX | Investigate against authoritative sources (official docs, source, spec). Persist as a versioned, immutable record re-usable across sessions. |
 | **have-a-try** | `/have-a-try` | Design question → Answer (prototype → delete) | Build a throwaway prototype to answer one design question. LOGIC mode (terminal app) or UI mode (variant switcher). Delete when done. |

@@ -21,6 +21,25 @@ Read config files under `docs/agents/` (created by `setup-project`). If the dire
 | `docs/agents/issue-tracker.md` | Issue tracker type and CLI conventions | Ask user which tracker they use |
 | `docs/agents/triage-labels.md` | Label vocabulary mapping | Use canonical defaults |
 | `docs/agents/language.md` | Language consumer skills should write human-facing output in (PRDs, ADRs, CONTEXT, Issues, comments) | Fall back to the user's input language; ask when unsure |
+| `docs/agents/coding-standards.md` | Applicable coding conventions, technical profile, source paths, and verification commands | Follow existing project instructions/style; do not assume a framework profile |
+
+### Step 1a: Apply Project Standards and Tracker Conventions
+
+**Coding standards.** If configured, read the maintained standards and the named technical profile's `SKILL.md` from the installed skills directory, then its task-relevant original references. Apply only to its declared repository/module/file scope. If no profile is configured, use one only when the actual project or explicit task establishes its applicability. A profile is supplementary context: it does not restart this protocol, authorize code during planning, replace artifact formats, skip workflow gates, or auto-chain skills.
+
+#### Standards Gate
+
+**Required context before affected work.** Once a standard/profile applies, successfully read its configuration, entry point and relevant original rules before changing affected code or approving its compliance. Record their actual paths in the task evidence. A missing/unreadable file, an unresolved reference or a missing original is a blocked prerequisite: stop affected code changes and compliance approval, identify what could not be read, and restore it within the authorized scope when possible. Read-only diagnosis and unrelated work may continue; an orchestrator summary or a prior session's memory does not satisfy this gate. Each dispatched sub-agent independently performs this read and supplies its own evidence.
+
+**Required verification before completion.** Derive required checks from the active stage, applicable standards and actual project build configuration. A code task is complete, verified, or eligible for a `Done` transition only after all checks required for that deliverable pass against its final changes. Preserve command, working directory, exit status and relevant output as evidence. When a check fails, repair and rerun it within scope. When it cannot run, report the affected task as blocked/unverified; reporting the gap is not a pass. Keep its completion status unfinished and do not close its issue or approve compliance. Existing merge/release criteria still apply after these checks pass.
+
+**Stage boundaries.** Planning does not require compiling prospective code. A read-only review may use current, verifiable build/test evidence for the change under review instead of rerunning unchanged checks solely because a review was requested. A TDD RED phase is an intentional intermediate result, not a completed implementation; preserve its test-first order and apply delivery checks after GREEN. Mark a check not applicable only with an explicit stage/scope reason. A missing dependency, failed command or unread standard is not a not-applicable reason. A review may report findings with verification gaps, but must withhold an unqualified pass when required evidence is missing or stale.
+
+Apply design constraints during think/grill, carry agreed contracts into story acceptance criteria, use implementation conventions during implement/tdd/debug, and check violations during review. Explicit project decisions/exceptions take precedence over generic defaults; cite their source and scope rather than inventing a waiver. Where documented API usage conflicts with the checkout, expose the mismatch and inspect source before writing code.
+
+#### Tracker Conventions
+
+All issue/PR/release examples in consumer skills are illustrative. Select operations from `docs/agents/issue-tracker.md` before executing them; never send a Gitee target to `gh` or `glab`. Preserve the tracker's returned identifiers and URLs (Gitee Issue numbers are strings), fetch comments/labels where required, and verify remote writes before updating local traceability. Missing authentication is an unpublished-work gap, not permission to switch trackers. With no `.git` directory (for example a downloaded ZIP), do not infer a remote from an upstream README; retain configured tracker facts and report unavailable Git operations.
 
 ### Step 2: Identify Multi-Repo Scope
 

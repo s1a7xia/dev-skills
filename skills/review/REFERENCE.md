@@ -56,11 +56,13 @@ git ls-files --others --exclude-standard
 # Everything on this branch since it diverged from the default branch
 git diff $(git merge-base <default-branch> HEAD)..HEAD
 
-# Or, when reviewing a PR, the PR diff directly
+# Or, for a GitHub PR only (use the configured tracker for other hosts)
 gh pr diff <number>
 ```
 
 Determine `<default-branch>` from `git remote show origin` (HEAD branch) or `main`/`master` by convention. State which range was reviewed in the merged report ("Reviewed: merge-base main..HEAD, <N> commits").
+
+For Gitee, obtain PR metadata and changed files with the configured MCP/OpenAPI operations. If patches are missing or the 300-diff limit is reached, fetch the verified base/head revisions and use a local Git diff, or report incomplete coverage. Do not run `gh pr diff` against a Gitee URL.
 
 **Empty on both branches?** There is nothing to review — stop and ask the user what to review. Never proceed with an empty diff bundle.
 
@@ -153,6 +155,7 @@ Sub-agents share no state and re-read all shared context from disk — see [anti
 Every sub-agent re-reads all of the following from disk before starting:
 
 - [ ] `docs/agents/domain.md` (if exists) — domain doc layout
+- [ ] `docs/agents/coding-standards.md`, applicable profile and original references — independently apply the [Standards Gate](../rules/entry-protocol.md#standards-gate) before a compliance verdict
 - [ ] PRD (from `docs/prd/` or path from `domain.md`) — requirements and acceptance criteria
 - [ ] Story / Issue — vertical-slice implementation ticket being reviewed
 - [ ] `CONTEXT.md` — domain glossary and terminology

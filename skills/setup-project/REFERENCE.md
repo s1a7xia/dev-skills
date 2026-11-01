@@ -28,6 +28,7 @@ When `docs/agents/` already exists, run this drift detection loop **before** any
 | Config file | Detection check | Drift signal | Action |
 |---|---|---|---|
 | `issue-tracker.md` | `git remote -v` → does the remote match the tracker type in the file? | Remote changed (GitHub→GitLab, or no remote→local) | Present change, confirm, rewrite `issue-tracker.md` |
+| `coding-standards.md` | Read existing standards, selected profile, stack/version, source paths and verification commands | Profile/version changed, source moved, or command no longer exists | Present the affected fields; preserve hand-written standards and explicit exceptions |
 | `triage-labels.md` | Check actual labels on 1-2 recent issues → do they still match the file? | Labels renamed, added, or deprecated | Present change, confirm, rewrite `triage-labels.md` |
 | `domain.md` | Does `CONTEXT-MAP.md` exist now when it didn't before? Were domain dirs (`docs/prd/`, `docs/adr/`, `docs/research/`) reorganized? | Context layout changed (single↔multi), dirs moved | Present change, confirm, rewrite `domain.md` |
 | `language.md` | Read existing value. Ask: "Is `<language>` still the right doc language for the team?" | Language preference changed | Confirm, rewrite `language.md`. If changed, trigger **Conformance Sweep** (Language Audit) |
@@ -140,12 +141,13 @@ When the project structure changes, re-running `/setup-project` updates the conf
 
 Look at the current repo to understand its starting state. Read whatever exists; don't assume:
 
-- `git remote -v` — is this a GitHub repo? GitLab? No remote?
+- `git remote -v` — GitHub, GitLab, Gitee, another host, or no remote? Handle HTTPS and SSH forms. With multiple remotes, retain an explicit tracker selection; a mirror alone does not select the tracker. A ZIP without `.git` is not evidence that the project uses local issues.
 - `AGENTS.md` and `CLAUDE.md` at the repo root — does either exist? Is there already an `## Agent skills` section in either?
 - `CONTEXT.md` and `CONTEXT-MAP.md` at the repo root
 - `docs/adr/` and `docs/prd/` directories
 - `docs/agents/` — does this skill's prior output already exist?
 - `.scratch/` — sign that a local-markdown issue tracker convention is already in use
+- Existing coding standards, CONTRIBUTING/style guides, linter configs, user-supplied conventions, and source evidence for any selected technical profile
 
 **Monorepo detection (Step 2):**
 - `package.json` with `"workspaces"` field (npm/yarn)
@@ -195,7 +197,7 @@ Record this as `docs/agents/repo-map.md` (see seed template below).
 Summarise what's present and what's missing. Show the detected defaults:
 
 - **Project structure**: single repo / monorepo / multi-repo
-- **Issue tracker**: GitHub (if remote points to github.com), GitLab (if gitlab.com or self-hosted), or Local markdown (if no remote)
+- **Issue tracker**: GitHub (`github.com`), GitLab (confirmed public/self-hosted), Gitee (`gitee.com`, official MCP/OpenAPI), or Local markdown (confirmed local tracking). Unknown/private hosts require identifying the actual service/API; do not infer GitLab or public Gitee solely from a hostname.
 - **Triage labels**: defaults (needs-triage, needs-info, ready-for-agent, ready-for-human, wontfix)
 - **Domain docs**: single-context (one CONTEXT.md + docs/adr/ at root) or multi-context (CONTEXT-MAP.md exists)
 - **Documentation language**: undetected by default — present as "please choose" (see Section D). If existing PRDs/ADRs/CONTEXT.md are consistently in one language, offer that as the recommended default.
@@ -214,6 +216,7 @@ If the user wants to change something, walk through that section **one at a time
 Options:
 - **GitHub** — issues live in the repo's GitHub Issues (uses the `gh` CLI)
 - **GitLab** — issues live in the repo's GitLab Issues (uses the `glab` CLI)
+- **Gitee** — issues/PRs live on Gitee; use an already-connected official MCP or the OpenAPI v5 operation map in [templates/issue-tracker-gitee.md](templates/issue-tracker-gitee.md). Record owner/repo, chosen remote, API base and credential environment-variable name. For Enterprise/private services verify the actual API/MCP. Check access with a read before remote writes, without creating test issues or displaying tokens.
 - **Local markdown** — issues live as files under `.scratch/<feature>/` in this repo (good for solo projects or repos without a remote)
 - **Other** (Jira, Linear, etc.) — ask the user to describe the workflow in one paragraph; the skill will record it as freeform prose
 
@@ -270,6 +273,25 @@ Present the detected tailoring as a draft; the user confirms or edits:
 
 If the file already carries a hand-written `## Engineering principles` (or equivalent) section, ask: adopt as-is (setup stops managing it), merge, or replace. Never overwrite it silently.
 
+### Section F — Coding Standards and Technical Profile
+
+Read existing project/team conventions first. When supplied, register their maintained paths and scope in `docs/agents/coding-standards.md`, seeded from [templates/coding-standards.md](templates/coding-standards.md); preserve explicit exceptions. Include the Coding standards section in the AGENTS.md/CLAUDE.md block below when this file is configured. Before declaring setup complete, actually read the registered profile and its original rules; report a missing dependency without declaring that profile ready. Do not copy the full standard into each workflow skill.
+
+For a confirmed RuoYi-Vue-Plus 6.X project using the team's conventions, select `ruoyi-plus-dev`; inspect POM/source and plus-ui rather than inferring it from Java/Vue alone. Resolve the installed profile by name at runtime, not by a contributor's absolute path. Record the actual source/template locations and verification commands. Keep team-private additions in the target project. With no extra conventions or selected profile, omit the optional file.
+
+Example registration for that confirmed stack (render in the project's documentation language and fill paths/commands from the checkout):
+
+```text
+Scope: Java business modules, plus-ui API/views, and SQL scripts
+Stack and version: RuoYi-Vue-Plus 6.X — verify exact version in the parent POM
+Technical profile: ruoyi-plus-dev
+Additional standards: project-relative team standard paths, or none
+Source of API truth: current module and the verified generator/demo paths
+Verification: actual Maven and frontend commands, with working directories
+```
+
+On re-run, update only changed registrations. A requested tracker change does not authorize overwriting unrelated coding standards. The [Standards Gate](../rules/entry-protocol.md#standards-gate) defines loading, verification evidence and completion conditions for consumers and sub-agents. Register checks with their applicable stage/scope and actual commands; planning is not required to compile code that has not changed.
+
 ## Step 5: Confirm
 
 Show the user a draft of all files to be written. Let them edit before writing. The draft includes the tailored `## Engineering principles` section — confirm its scope, placeholder fills, and quick-reference commands before writing.
@@ -313,6 +335,11 @@ Apply first-principles reasoning to engineering work. Establish WHAT before dete
 
 [one-line summary — e.g. "all docs in English"]. See `docs/agents/language.md`.
 
+<!-- Include when project coding standards or a technical profile are configured -->
+### Coding standards
+
+[selected profile and affected scope]. Read `docs/agents/coding-standards.md` and its registered original rules before affected work; apply the installed Entry Protocol's Standards Gate for verification and completion.
+
 <!-- Multi-repo only: include this section -->
 ### Repo map
 
@@ -354,10 +381,12 @@ Each generated file is seeded from a template, customised based on the user's ch
 | AGENTS.md/CLAUDE.md `## Engineering principles` | [templates/engineering-principles.md](templates/engineering-principles.md) | Always (tailor per Section E; skip if the user keeps their own section) |
 | `docs/agents/issue-tracker.md` | [templates/issue-tracker-github.md](templates/issue-tracker-github.md) | Remote points to github.com |
 | | [templates/issue-tracker-gitlab.md](templates/issue-tracker-gitlab.md) | Remote points to gitlab.com or self-hosted GitLab |
+| | [templates/issue-tracker-gitee.md](templates/issue-tracker-gitee.md) | Gitee selected; verify public vs Enterprise/private API |
 | | [templates/issue-tracker-local.md](templates/issue-tracker-local.md) | No remote (local markdown in `.scratch/`) |
 | `docs/agents/triage-labels.md` | [templates/triage-labels.md](templates/triage-labels.md) | Always (edit right-hand column to match the tracker's vocabulary) |
 | `docs/agents/domain.md` | [templates/domain.md](templates/domain.md) | Always. **Before writing:** scan `docs/prd/`, `docs/adr/`, `docs/research/` for existing files; replace the example filenames in the template's File structure section with the actual filenames, and omit empty/missing branches. On first run (no docs yet), use the template examples as-is. |
 | `docs/agents/language.md` | [templates/language.md](templates/language.md) | Always (fill in the team's chosen language) |
+| `docs/agents/coding-standards.md` | [templates/coding-standards.md](templates/coding-standards.md) | Project conventions or a technical profile are configured |
 | `docs/agents/repo-map.md` | [templates/repo-map.md](templates/repo-map.md) | Multi-repo only |
 
 Read the relevant template file, apply the user's Step 4 overrides, and write the customised result to the target path.

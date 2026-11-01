@@ -5,17 +5,16 @@ description: "Scaffold or update per-repo configuration for engineering skills: 
 
 # Setup Project
 
-🥷 Configure the repo so skills know where to read and write.
-
 Scaffold the per-repo configuration that the engineering skills assume:
 
 - **Working principles** — a fixed first-principles reasoning prompt written verbatim into the `## Agent skills` rules block, so every agent session in the repo reasons from evidence
 - **Engineering principles** — a stack-tailored `## Engineering principles` section in AGENTS.md/CLAUDE.md (design-first planning, module quality, boundaries, security, concurrency, UX, reuse, maintainability, reversibility) plus a change quick-reference mapping each kind of change to its verification commands
 - **Project structure** — single repo, monorepo (multiple packages in one repo), or multi-repo (multiple related repos)
-- **Issue tracker** — where issues live (GitHub, GitLab, local markdown, or other)
+- **Issue tracker** — where issues live (GitHub, GitLab, Gitee via official MCP/OpenAPI, local markdown, or other)
 - **Triage labels** — the strings used for the five canonical triage roles
 - **Domain docs** — where `CONTEXT.md`, ADRs, PRDs, and the research index live; how consumer skills find them across repos
 - **Documentation language** — the language skills should write human-facing output in (PRDs, ADRs, CONTEXT, Issues, comments), so output is readable for the team regardless of who triggers the skill
+- **Coding standards** — optional project conventions and technical profile (such as `ruoyi-plus-dev`), loaded by consumer skills and their sub-agents
 
 This is a prompt-driven skill, not a deterministic script. Explore, present what you found, confirm with the user, then write.
 
@@ -31,15 +30,16 @@ This skill creates the configuration that the [Skill Entry Protocol](../rules/en
 | `docs/agents/issue-tracker.md` | Step 1 | Issue tracker type and CLI conventions |
 | `docs/agents/triage-labels.md` | Step 1 | Label vocabulary mapping for the five canonical triage roles |
 | `docs/agents/language.md` | Step 1 | Language for all human-facing prose (PRDs, ADRs, CONTEXT, Issues, comments) |
+| `docs/agents/coding-standards.md` | Step 1a (if configured) | Scoped conventions, technical profile, source evidence, and verification commands |
 | `docs/agents/repo-map.md` | Step 2 (if exists) | Multi-repo structure — which repos exist, which owns the primary issue tracker |
 
 This is not a consumer skill — it is the **foundation** that consumer skills depend on. The Entry Protocol's "If missing" degradation paths ensure skills still work without setup-project, but with reduced precision.
 
 ## Outcome Contract
 
-- **Outcome**: `docs/agents/` directory with issue-tracker, triage-labels, domain docs, documentation language, and (for multi-repo) repo-map; `## Agent skills` block in AGENTS.md/CLAUDE.md opening with the fixed Working principles (first-principles) prompt, followed by the tailored `## Engineering principles` section with its change quick-reference. On re-run: conformance sweep results — naming, language, and format audit of existing doc files.
+- **Outcome**: `docs/agents/` directory with issue-tracker, triage-labels, domain docs, documentation language, optional coding-standards registration, and (for multi-repo) repo-map; `## Agent skills` block in AGENTS.md/CLAUDE.md opening with the fixed Working principles (first-principles) prompt, followed by the tailored `## Engineering principles` section with its change quick-reference. On re-run: conformance sweep results — naming, language, and format audit of existing doc files.
 - **Done when**: User confirms configuration, all files written, AGENTS.md updated
-- **Evidence**: `docs/agents/issue-tracker.md`, `docs/agents/triage-labels.md`, `docs/agents/domain.md`, `docs/agents/language.md`; `docs/agents/repo-map.md` (multi-repo only); `## Engineering principles` section present and tailored (scope matches detected stack, quick-reference commands are real repo commands)
+- **Evidence**: `docs/agents/issue-tracker.md`, `docs/agents/triage-labels.md`, `docs/agents/domain.md`, `docs/agents/language.md`; `coding-standards.md` when configured; `docs/agents/repo-map.md` (multi-repo only); `## Engineering principles` section present and tailored (scope matches detected stack, quick-reference commands are real repo commands)
 - **Output**: Summary of configuration, next step to use engineering skills
 
 ## Process Summary
@@ -50,7 +50,7 @@ This is not a consumer skill — it is the **foundation** that consumer skills d
 
 **Step 3: Present findings** — show detected defaults (project structure, issue tracker, triage labels, domain layout, documentation language). If updating, show a diff of what changed vs current config.
 
-**Step 4: Ask for overrides** — present the full detected configuration as a draft; ask if anything needs changing. If the user wants to change something, walk through that section one at a time. Sections: A (Issue Tracker), B (Triage Labels), C (Domain Docs), D (Documentation Language), E (Engineering Principles — scope, line bound, dependency paths, quick-reference commands). If everything looks good, proceed.
+**Step 4: Ask for overrides** — present the full detected configuration as a draft; ask if anything needs changing. If the user wants to change something, walk through that section one at a time. Sections: A (Issue Tracker), B (Triage Labels), C (Domain Docs), D (Documentation Language), E (Engineering Principles — scope, line bound, dependency paths, quick-reference commands), F (Coding Standards — existing conventions and optional technical profile). If everything looks good, proceed.
 
 **Step 4a (Re-run only): Conformance sweep** — After config overrides are confirmed, scan `docs/prd/`, `docs/adr/`, `docs/research/` for files that don't match the new settings. Group findings by naming, language, format, and metadata. For naming violations suggest rename; for language flag and suggest `/write`; for format/metadata report only. Confirm with user before acting. See [REFERENCE.md](REFERENCE.md) Conformance Sweep.
 
@@ -76,6 +76,8 @@ See [REFERENCE.md](REFERENCE.md) for seed templates and detailed steps.
 | Paraphrased or dropped the Working principles prompt | Step 6: Copy it verbatim — fixed text, not a per-repo template |
 | Template principles copied wholesale into a single-stack repo | Step 4E: tailor to the detected stack — drop <Backend>/<Frontend>/<Multi-tenant> blocks that don't apply, confirm scope with the user |
 | Quick-reference commands invented instead of read from the repo | Step 4E: fill from package.json scripts / Makefile / CI config; drop rows with no real command |
+| Gitee remote treated as GitHub / GitLab | Use the Gitee template and connected MCP or OpenAPI; preserve string Issue numbers |
+| Standards loaded only by the orchestrator | Entry Protocol Step 1a: sub-agents re-read the selected profile and scoped standards |
 | Overwrote the user's hand-written principles section | Step 4E: if an `## Engineering principles` section already exists, ask adopt/merge/replace — never silently overwrite |
 | Wrote files without user confirmation | Step 5: Show full draft before writing |
 | Re-run: overwrote unchanged sections / missed drift | Step 1-2: Read existing config, compare structure against `repo-map.md`, only update what changed |
@@ -94,7 +96,8 @@ Setup complete.
 
 Configuration:
 - Project structure: <single / monorepo / multi-repo>
-- Issue tracker: <GitHub / GitLab / Local / Other>
+- Issue tracker: <GitHub / GitLab / Gitee / Local / Other>
+- Coding standards: <existing conventions / selected profile / none>
 - Triage labels: <defaults / customised>
 - Domain docs: <single-context / multi-context>
 - Documentation language: <English / Chinese / Other>
@@ -105,6 +108,7 @@ Updated files:
 - docs/agents/triage-labels.md — created
 - docs/agents/domain.md — created
 - docs/agents/language.md — created
+- docs/agents/coding-standards.md — created/updated (when configured)
 - docs/agents/repo-map.md — created (multi-repo only)
 
 Skills now configured: think, research, have-a-try, grill, story, implement, tdd, review, debug, improve-architecture, write

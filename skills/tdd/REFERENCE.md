@@ -143,6 +143,7 @@ Sub-agents share no state and re-read all shared context from disk — see [anti
 
 Every sub-agent re-reads all of the following from disk before starting its phase:
 
+- [ ] `docs/agents/coding-standards.md`, applicable profile and original references — independently apply the [Standards Gate](../rules/entry-protocol.md#standards-gate), including its TDD stage boundary
 - [ ] PRD file (`docs/prd/PRD-NNNN-<title>.md`) — requirements and acceptance criteria
 - [ ] Story/Issue — fetch the latest issue body
 - [ ] `CONTEXT.md` — domain glossary and terminology

@@ -51,3 +51,12 @@ iteration,S_hard_pass,S_hard_total,S_soft_pass,S_soft_total,W_pass,W_total,T_tra
 49,216,216,74,74,36,36,33.3,62.5,hold-steady confirmation (post-convergence)
 50,216,216,74,74,36,36,33.3,62.5,FINAL GATE: full suite at ship state
 51,216,216,74,74,36,36,33.3,62.5,
+52,216,216,74,74,36,36,33.3,62.5,Baseline before Gitee and project coding standards integration
+53,232,232,77,79,37,37,33.3,62.5,Gitee MCP/OpenAPI template and scoped RuoYi coding profile integration
+54,232,232,79,79,38,38,45.5,64.3,Added RuoYi routing coverage; all static/workflow checks; T-Live round running
+55,232,232,79,79,38,38,45.5,64.3,Integrated Gitee alongside GitHub; original ry-coding bundled verbatim; T-Live incomplete due subagent usage limit
+56,232,232,79,79,38,38,45.5,64.3,Baseline before enforcing standards loading and verification completion gates
+57,232,232,79,79,38,38,45.5,64.3,"Required rules and verification gate, stage boundaries, complete initialization pointer, and loading graph mutation regressions"
+58,232,232,79,79,39,39,45.5,64.3,Standards completion gate; W10 runs mutation regressions automatically; unchanged descriptions and trigger proxy
+59,232,232,79,79,39,39,45.5,64.3,"Final standards hardening: required loading, completion and stage gates; 8 mutation regressions and 3 isolated independent model probes passed; no description changes"
+60,232,232,79,79,39,39,45.5,64.3,若依工具复用补全：编码前检索 common-core/utils、核对方法语义与调用点、新增实现说明缺口、交付附复用证据；未改 description。

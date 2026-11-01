@@ -6,7 +6,7 @@ This project spans multiple repositories. This file records which repo does what
 
 | Repo | URL | Role | Issue Tracker | Domain Docs |
 |------|-----|------|---------------|-------------|
-| `<name>` | `<clone-url>` | `<role: API server / web app / shared lib / infra>` | `<GitHub / GitLab / Local / Shared>` | `<single-context / multi-context>` |
+| `<name>` | `<clone-url>` | `<role: API server / web app / shared lib / infra>` | `<GitHub / GitLab / Gitee / Local / Shared>` | `<single-context / multi-context>` |
 
 ## Primary issue tracker
 

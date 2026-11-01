@@ -59,7 +59,8 @@ AI 编码代理功能强大但缺乏一致性：跳过规划、忘记领域上�
 
 ```bash
 # 将全部技能安装到你的项目中（一次性）
-npx skills@latest add ByronFinn/dev-skills
+# 将路径替换为这份改造版仓库的位置
+npx skills@latest add ../dev-skills-main --skill "*" --copy
 
 # 为你的仓库配置技能行为（一次性）
 /setup-project
@@ -70,17 +71,42 @@ npx skills@latest add ByronFinn/dev-skills
 
 就是这么简单。每个技能通过**斜杠命令**触发，完成后自动停止——技能不会自动串联。由你来决定何时进入下一步。
 
+使用这份改造后的技能时，在目标业务项目中从本地目录安装，避免装回尚未修改的上游版本；将下列路径替换为这份技能仓库的位置：
+
+```powershell
+npx skills@latest add ../dev-skills-main --skill "*" --copy
+```
+
+上述命令一次安装整套技能，包含共享规则和内置若依规范，无需单独安装或调用 `ry-coding`。随后在业务项目运行 `/setup-project`，按实际仓库选择 **Gitee**，并将内置的 `ruoyi-plus-dev` 登记到 `docs/agents/coding-standards.md`。规划、拆分、开发、TDD、排错和审查沿用现有工作流，并按配置读取规范原文。框架接口、模板位置和验证命令以业务项目实际源码为准。
+
+启用的规范或原文无法读取时，停止受影响的编码和合规批准；必需编译或检查未通过时，任务保持未完成。规划阶段和 TDD 的 RED 中间阶段按各自阶段处理；只读审查可以报告发现，但缺少必需证据时不得给出无保留的通过结论。
+
+Gitee 优先使用已连接的官方 MCP，也可按配置使用 OpenAPI v5；本次改造不会自动连接账号。令牌由运行环境提供，远程读写需要对应访问权限。Gitee 企业版或私有部署需核实其实际 API。
+
+将改造后的技能仓库发布到你们的 Gitee 后，可用完整 Git URL 安装（替换示例团队和仓库名；私有仓库使用已有 Git 凭证）：
+
+```bash
+npx skills add https://gitee.com/YOUR_TEAM/dev-skills.git
+```
+
+`owner/repo` 简写默认指向 GitHub，Gitee 使用完整 URL。也可以先克隆再从本地目录安装。已使用 `skills@1.7.4` 对 Gitee 官方技能仓库验证完整 `.git` URL 的技能发现。
+
+Gitee 与 GitHub、GitLab 使用同一个任务追踪配置入口：`story` 等技能沿用原有流程，由 `docs/agents/issue-tracker.md` 决定平台操作。团队若依规范作为技术约束集成进这些流程，在设计、拆分、编码、排错和审查时按需读取。
+
+`ruoyi-plus-dev` 完整保留团队提供的 [ry-coding 原文](skills/ruoyi-plus-dev/references/ry-coding.md)，涵盖全部七个章节、四步执行顺序和六条交付自检。英文入口与 REFERENCE 负责流程衔接，执行时读取原文，不以摘要代替规则。源码中的路径按目标若依项目根目录解释。
+
 ---
 
 ## 🧰 技能总览
 
-> **12 项任务技能**覆盖完整的工程生命周期：规划 → 调研 → 验证 → 分解 → 实现 → 评审 → 调试 → 维护 → 写作。
+> **12 项任务技能 + 1 项可选技术规范**覆盖完整的工程生命周期：规划 → 调研 → 验证 → 分解 → 实现 → 评审 → 调试 → 维护 → 写作。
 >
 > 它们会附带一个额外单元：`rules/`——跨技能共享规则包（反模式、入口协议、子代理运行时语义、编写规范、工程原则）。它**不是任务技能**，且为 `disable-model-invocation`；存在的目的是让安装器把共享规则一并带上，使各技能的交叉引用在安装后仍可解析。
 
 | 技能 | 命令 | 输入 → 输出 | 描述 |
 |---|---|---|---|
 | **setup-project** | `/setup-project` | 仓库状态 → `docs/agents/` 配置 | 一次性初始化：议题追踪器、分诊标签、领域文档布局、仓库映射。项目结构变化后可重新运行。 |
+| **ruoyi-plus-dev** | `/ruoyi-plus-dev` 或项目配置 | 若依任务 → 规范约束与验证证据 | 团队的 RuoYi-Vue-Plus 6.X Java、plus-ui Vue/TS 与 SQL 规范，供现有流程按需加载。 |
 | **think** | `/think` | 模糊想法 → PRD (`docs/prd/`) | 发散构思 → 收敛为决策完备的方案。每次一个问题，附推荐答案。 |
 | **research** | `/research` | 技术栈×主题问题 → 不可变记录 + INDEX | 基于权威信源（官方文档、源码、规范）调研。持久化为版本化、不可变的记录，可在会话间复用。 |
 | **have-a-try** | `/have-a-try` | 设计问题 → 答案（原型→删除） | 构建一次性原型来回答一个设计问题。LOGIC 模式（终端应用）或 UI 模式（变体切换器）。完成后删除。 |

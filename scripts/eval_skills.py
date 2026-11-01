@@ -284,8 +284,6 @@ TRACE_PAIRS = [
     ("Grilled by", {"grill"}, {"entry-protocol.md", "story", "implement", "review"}),
     ("Prototyped by", {"have-a-try"}, {"think", "grill", "story", "implement"}),
 ]
-SKILL_NAMES = ["think", "grill", "story", "implement", "tdd", "review", "debug", "research",
-               "have-a-try", "improve-architecture", "write", "setup-project", "rules"]
 
 
 def check_workflow(skills: dict[str, dict]) -> None:
@@ -309,7 +307,7 @@ def check_workflow(skills: dict[str, dict]) -> None:
         text = f.read_text(encoding="utf-8")
         for m in re.finditer(r"/(think|grill|story|implement|tdd|review|debug|research|have-a-try|improve-architecture|write|setup-project)\b", text):
             pass  # all names in this alternation exist as dirs; renamed skills break W4 below instead
-    for name in SKILL_NAMES:
+    for name in skills:
         rec("W", "W4", name, "hard", name in (ROOT / "skills/RESOLVER.md").read_text(encoding="utf-8"),
             fail_text("W4", name, "skill not mentioned in RESOLVER.md"))
 
@@ -375,6 +373,15 @@ def check_workflow(skills: dict[str, dict]) -> None:
         dangling = sorted({m for m in re.findall(r"\(([\w-]+\.md)\)", index_text)} - records - {"INDEX.md"})
         rec("W", "W9b", "research-index", "hard", not dangling,
             fail_text("W9b", "-", f"INDEX.md links to nonexistent record(s): {dangling}"))
+
+    # W10 loading regressions must be detected, not merely pass on the intact tree.
+    proc = subprocess.run(
+        [sys.executable, str(ROOT / "scripts/test_standards_integration.py")],
+        capture_output=True, text=True,
+    )
+    tail = "\n".join((proc.stdout + proc.stderr).strip().splitlines()[-5:])
+    rec("W", "W10", "standards-wiring", "hard", proc.returncode == 0,
+        fail_text("W10", "test_standards_integration.py", tail))
 
 
 

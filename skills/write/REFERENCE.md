@@ -122,7 +122,7 @@ See [references/write-product-localization.md](references/write-product-localiza
 
 ### Release Notes Mode
 
-1. Gather style references: read project's existing releases (changelog, release page, `gh release view`).
+1. Gather style references: read project's existing releases (changelog, release page, or the configured tracker's release reader; `gh release view` is a GitHub-only example).
 2. Extract from `git log <last-tag>..HEAD` rather than memory. Read every `feat:` and `fix:` commit.
 3. Group by user-perceivable feature, not internal taxonomy.
 4. One sentence per item, naming the user-visible change.
@@ -130,7 +130,7 @@ See [references/write-product-localization.md](references/write-product-localiza
 
 ### Public Reply Mode
 
-1. Re-read the live issue/PR with `gh issue view <num>` or `gh pr view <num>`.
+1. Re-read the live issue/PR through `docs/agents/issue-tracker.md` (GitHub examples: `gh issue view <num>` / `gh pr view <num>`; for Gitee use the configured MCP/OpenAPI). Preserve its returned identifier and URL.
 2. Draft reply:
    - `@<reporter>` + thanks line (match reporter's language)
    - Cause in one sentence, impact in one sentence

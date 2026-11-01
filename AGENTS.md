@@ -4,9 +4,9 @@
 
 This is **dev-skills** — a collection of reusable agent skills for software engineering workflows, published by ByronFinn. Skills are Markdown-based instruction sets designed to be loaded by AI coding agents (e.g., Claude Code via the `skills.sh` plugin system). There is no application code, no build step, and no runtime in this repository — the "product" is the skill documents themselves.
 
-Installation (by end users):
+Installation of this modified checkout (adjust the path from the target project):
 ```bash
-npx skills@latest add ByronFinn/dev-skills
+npx skills@latest add ../dev-skills-main --skill "*" --copy
 ```
 
 ## Repository Structure
@@ -25,6 +25,10 @@ skills/
 │   ├── SKILL.md
 │   ├── REFERENCE.md
 │   └── templates/               # Seed templates — engineering-principles → AGENTS.md/CLAUDE.md section; domain, issue-tracker, triage-labels, language, repo-map → docs/agents/
+├── ruoyi-plus-dev/              # Optional RuoYi-Vue-Plus 6.X / plus-ui coding profile
+│   ├── SKILL.md
+│   ├── REFERENCE.md
+│   └── references/ry-coding.md  # Complete supplied team standard, preserved verbatim
 ├── think/                       # Brainstorming skill → PRD
 │   ├── SKILL.md
 │   ├── REFERENCE.md

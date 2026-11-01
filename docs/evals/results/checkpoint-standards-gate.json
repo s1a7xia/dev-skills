@@ -1,0 +1,66 @@
+{
+  "date": "2026-10-31",
+  "scope": "Isolated fixture forward-tests of standards gate decisions; not production application validation",
+  "description_changes": false,
+  "interview_rule_changes": false,
+  "cases": [
+    {
+      "id": "missing_original",
+      "passed": true,
+      "observed_status": "Blocked",
+      "production_source_unchanged": true,
+      "missing_reference_confirmed": true,
+      "verification": {
+        "command": "python verify.py",
+        "cwd": "isolated project root",
+        "exit_code": 1,
+        "output": "Empty remark case has not been implemented"
+      },
+      "agent_result": "Original standard was missing. Reported missing path, retained production source, and left the criterion unfinished."
+    },
+    {
+      "id": "required_compilation_failure",
+      "passed": true,
+      "observed_status": "Blocked / Unverified",
+      "production_source_unchanged": true,
+      "verification": {
+        "command": "./mvnw.cmd test-compile",
+        "cwd": "isolated project root",
+        "exit_code": 1,
+        "output": "Could not resolve build dependencies: repository offline"
+      },
+      "agent_result": "Executed the required wrapper, rejected stale BUILD SUCCESS evidence, changed only task status, and withheld completion."
+    },
+    {
+      "id": "planning_stage",
+      "passed": true,
+      "observed_status": "Planning stage complete; implementation not started",
+      "production_source_unchanged": true,
+      "build_wrapper_invoked": false,
+      "agent_result": "Read complete rules, wrote a planning note, distinguished omitted from explicit clear input, and did not claim implementation compliance or compilation."
+    }
+  ],
+  "mutation_regressions": {
+    "tests": 8,
+    "passed": 8,
+    "removed_loading_wiring_eval_exit_code": 1,
+    "failed_checks": [
+      "W1",
+      "W10"
+    ]
+  },
+  "limits": [
+    "Build wrappers and minimal source are controlled fixtures, not a real Maven application.",
+    "Historical full T-Live routing evaluation remains incomplete.",
+    "Real RuoYi application integration and authenticated Gitee writes have not been tested."
+  ],
+  "installation": {
+    "cli_version": "1.7.4",
+    "scope": "isolated project",
+    "units": 14,
+    "markdown_files": 55,
+    "all_files_equal_to_source": true,
+    "installed_loading_graph_passed": true,
+    "original_standard_sha256": "840b21d8a8b05cc139e5bdd4ac7ce877ed2a95deee3c01f5557c5ead68a1f74a"
+  }
+}

@@ -11,6 +11,7 @@ Apply the [Skill Entry Protocol](../rules/entry-protocol.md) to read config and 
 - [ ] `docs/agents/issue-tracker.md` — tracker type and CLI conventions
 - [ ] `docs/agents/triage-labels.md` — label vocabulary
 - [ ] `docs/agents/language.md` — human-facing output language
+- [ ] `docs/agents/coding-standards.md`, selected profile and original rules — apply the [Standards Gate](../rules/entry-protocol.md#standards-gate) for loading and completion evidence
 - [ ] `CONTEXT.md` — domain glossary
 - [ ] `docs/prd/PRD-NNNN-<title>.md` — product requirements (the PRD)
 - [ ] `docs/adr/*.md` — architecture decision records

@@ -6,6 +6,9 @@ The product of this repo is Markdown, so the failure mode is not a broken build
 definition restated in another, a tree that no longer matches disk). This script
 turns the cheapest of those invariants into a command.
 
+The standards check validates packaged reference reachability, explicit workflow
+gate links, sub-agent reread dependencies and the generated project config pointer.
+
 Standard library only. Run from the repo root:
 
     python3 scripts/check-docs.py
@@ -271,6 +274,94 @@ def check_tdd_phase_pointer() -> None:
     )
 
 
+def check_standards_integration() -> None:
+    """Check the shipped loading graph, not whether a model obeys its prose."""
+    print("coding standards: configuration, gate, original rules and consumers stay connected")
+    entry = ROOT / "skills/rules/entry-protocol.md"
+    profile = ROOT / "skills/ruoyi-plus-dev/SKILL.md"
+    original = ROOT / "skills/ruoyi-plus-dev/references/ry-coding.md"
+
+    def read(path: Path) -> str:
+        return path.read_text(encoding="utf-8") if path.is_file() else ""
+
+    def targets(path: Path) -> list[tuple[Path, str]]:
+        found = []
+        for target in re.findall(r"\]\(([^)\s]+\.md(?:#[^)\s]+)?)\)", read(path)):
+            if target.startswith(("https://", "http://", "mailto:")):
+                continue
+            filename, _, anchor = target.partition("#")
+            resolved = (path.parent / filename).resolve()
+            if resolved.is_relative_to((ROOT / "skills").resolve()):
+                found.append((resolved, anchor))
+        return found
+
+    def reaches(start: Path, wanted: Path) -> bool:
+        pending, seen = [start.resolve()], set()
+        while pending:
+            current = pending.pop()
+            if current in seen or not current.is_file():
+                continue
+            if current == wanted.resolve():
+                return True
+            seen.add(current)
+            pending.extend(path for path, _ in targets(current))
+        return False
+
+    entry_text = read(entry)
+    check(
+        "coding standards is a configured input",
+        re.search(r"^\|\s*`docs/agents/coding-standards\.md`\s*\|", entry_text, re.M) is not None,
+        "the shared entry protocol no longer registers the project's standards configuration",
+    )
+    check(
+        "the shared Standards Gate anchor exists",
+        re.search(r"^#{2,6} Standards Gate\s*$", entry_text, re.M) is not None,
+        "consumer gate links require a real Standards Gate section",
+    )
+    check(
+        "the profile reaches the packaged original rules",
+        reaches(profile, original),
+        "a retained original is insufficient if the skill cannot reach it through its references",
+    )
+    for name in ("implement", "tdd", "debug", "review"):
+        directory = ROOT / "skills" / name
+        sources = [directory / "SKILL.md", directory / "REFERENCE.md"]
+        check(
+            f"{name} reaches the shared entry protocol",
+            reaches(sources[0], entry),
+            "the workflow's entry/reference links no longer reach the shared bootstrap",
+        )
+        check(
+            f"{name} links the Standards Gate",
+            any(path == entry.resolve() and anchor == "standards-gate"
+                for source in sources for path, anchor in targets(source)),
+            "the workflow must retain its explicit loading/completion gate link",
+        )
+    for name in ("tdd", "review"):
+        text = read(ROOT / "skills" / name / "REFERENCE.md")
+        common = re.search(
+            r"^### Shared Context Re-Read Checklist\s*$(.*?)(?=^#{2,3} |\Z)",
+            text, re.M | re.S,
+        )
+        check(
+            f"{name} sub-agents re-read the standards configuration",
+            common is not None and any(
+                line.startswith("- [ ]") and "`docs/agents/coding-standards.md`" in line
+                and "entry-protocol.md#standards-gate" in line
+                for line in common.group(1).splitlines()
+            ),
+            "keep this dependency in the shared child checklist, not only the orchestrator context",
+        )
+    setup = read(ROOT / "skills/setup-project/REFERENCE.md")
+    template = re.search(r"```markdown\s*\n## Agent skills\s*\n(.*?)\n```", setup, re.S)
+    check(
+        "the generated agent block includes the standards pointer",
+        template is not None and "### Coding standards" in template.group(1)
+        and "`docs/agents/coding-standards.md`" in template.group(1),
+        "setup instructions outside the generated block do not repair an incomplete output template",
+    )
+
+
 def main() -> int:
     for check_fn in (
         check_links,
@@ -283,6 +374,7 @@ def main() -> int:
         check_shipped_links,
         check_rules_bundle,
         check_tdd_phase_pointer,
+        check_standards_integration,
     ):
         check_fn()
     print()

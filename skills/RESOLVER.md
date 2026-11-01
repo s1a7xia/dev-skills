@@ -20,6 +20,7 @@ Priority when multiple skills could match:
 | User provides / asks about | Skill | Why |
 |---|---|---|
 | New project, configure skills, issue tracker setup, initialize workflow | `setup-project` | Scaffold `docs/agents/` configuration and AGENTS.md before skills can run. |
+| RuoYi-Vue-Plus 6.X / plus-ui Java, Vue/TS or SQL work; 若依Plus编码规范 | `ruoyi-plus-dev` | Technical profile supplementing the active workflow; source-verified framework conventions, no separate pipeline. |
 | Rough idea, unclear requirements, feasibility, design approach, “how should we build this?” | `think` | Convert ambiguity into a decision-complete PRD. |
 | Technical investigation needing durable capture — “what’s the best practice for X in version Y”, stack/version-specific research, authoritative-source lookup to reuse later | `research` | Persist an immutable, versioned research record into `docs/research/` + INDEX, so the next task queries INDEX instead of re-searching. |
 | A divergence to settle by running code — conflicting options or a contested claim; “which is faster”, “which option survives concern C” (→ BENCH/SPIKE) | `have-a-try` | Minimal comparative demo: shared-harness measurement or concern×option matrix — selects or eliminates. |
@@ -192,7 +193,8 @@ Each skill may depend on files or configuration produced by earlier skills. Miss
 
 | Skill | Config (always read first) | Required | Optional (enhances output if present) | Format Contract | Auto-created by |
 |-------|---------------------------|----------|---------------------------------------|----------------|-----------------|
-| `setup-project` | — | Git repo | — | — | — (this is the foundation) |
+| `setup-project` | — | Project directory (Git metadata when available) | — | — | — (this is the foundation) |
+| `ruoyi-plus-dev` | `coding-standards.md` (if configured) | Confirmed RuoYi-Vue-Plus project or explicit profile selection | Actual source, generator/demo templates, POM and frontend scripts | Active workflow's format | No separate artifact; contributes conventions and verification evidence |
 | `think` | `domain.md` | — | `CONTEXT.md`, `docs/adr/`, existing PRDs, `docs/research/INDEX.md` | PRD-FORMAT.md | Creates PRD if user opts in |
 | `research` | `domain.md` | A concrete stack×topic×major question | `CONTEXT.md`, `docs/adr/`, `docs/research/INDEX.md` (for dedup) | RESEARCH-FORMAT.md, INDEX-FORMAT.md | Creates `docs/research/` + INDEX lazily on first record |
 | `have-a-try` | `domain.md` | A divergence — conflicting options or a contested claim, settleable by running code | `CONTEXT.md`, `docs/adr/`, PRD | — | — |
@@ -206,6 +208,8 @@ Each skill may depend on files or configuration produced by earlier skills. Miss
 | `write` | `domain.md` | Text to edit | Project style references, existing releases, `CONTEXT.md` | — | — |
 
 **Config column**: Files under `docs/agents/`. `domain.md` tells consumer skills where domain docs live. `repo-map.md` tells them about multi-repo structure. `language.md` tells them what language to write human-facing output in (PRDs, ADRs, CONTEXT, Issues). All are optional — skills fall back to default paths (and, for language, the user's input language) if missing.
+
+`coding-standards.md` registers scoped standards and an optional technical profile; the shared Entry Protocol loads it for all consumer skills. `ruoyi-plus-dev` supplements planning, story, implementation, TDD, debugging and review when applicable. It does not replace explicit workflow selection: a RuoYi regression still routes to `debug`, a RuoYi diff review to `review`; these workflows load the profile as context. Other frameworks inherit no RuoYi constraints. Tracker selection is also configuration: Gitee uses its MCP/OpenAPI convention while PRD/Story formats and handoffs stay the same.
 
 **Format Contract column**: The output format expected by downstream skills. "Issue body = STORY-FORMAT.md" means issues created by the skill use the Story Format body.
 

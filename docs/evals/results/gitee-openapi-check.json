@@ -1,0 +1,107 @@
+{
+  "date": "2026-10-31",
+  "schema_url": "https://gitee.com/api/v5/doc_json",
+  "version": "5.4.93",
+  "schema_sha256": "e10aa8621aae6f7650569feb9ab85402e24007ca051da0331931739b26bcd701",
+  "operations": [
+    {
+      "method": "DELETE",
+      "path": "/repos/{owner}/{repo}/issues/{number}/labels/{name}",
+      "present_in_official_schema": true
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}",
+      "present_in_official_schema": true
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/issues",
+      "present_in_official_schema": true
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/issues/{number}",
+      "present_in_official_schema": true
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/issues/{number}/comments",
+      "present_in_official_schema": true
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/labels",
+      "present_in_official_schema": true
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/pulls/{number}",
+      "present_in_official_schema": true
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/pulls/{number}/comments",
+      "present_in_official_schema": true
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/pulls/{number}/files",
+      "present_in_official_schema": true
+    },
+    {
+      "method": "GET",
+      "path": "/repos/{owner}/{repo}/releases/latest",
+      "present_in_official_schema": true
+    },
+    {
+      "method": "PATCH",
+      "path": "/repos/{owner}/issues/{number}",
+      "present_in_official_schema": true
+    },
+    {
+      "method": "POST",
+      "path": "/repos/{owner}/issues",
+      "present_in_official_schema": true
+    },
+    {
+      "method": "POST",
+      "path": "/repos/{owner}/{repo}/issues/{number}/comments",
+      "present_in_official_schema": true
+    },
+    {
+      "method": "POST",
+      "path": "/repos/{owner}/{repo}/issues/{number}/labels",
+      "present_in_official_schema": true
+    },
+    {
+      "method": "POST",
+      "path": "/repos/{owner}/{repo}/pulls",
+      "present_in_official_schema": true
+    },
+    {
+      "method": "POST",
+      "path": "/repos/{owner}/{repo}/pulls/{number}/comments",
+      "present_in_official_schema": true
+    }
+  ],
+  "read_only_smoke": [
+    {
+      "url": "https://gitee.com/api/v5/repos/oschina/mcp-gitee",
+      "status": 200,
+      "number_type": null
+    },
+    {
+      "url": "https://gitee.com/api/v5/repos/oschina/mcp-gitee/issues?state=all&per_page=1&page=1",
+      "status": 200,
+      "number_type": "str"
+    },
+    {
+      "url": "https://gitee.com/api/v5/repos/oschina/mcp-gitee/pulls?state=all&per_page=1&page=1",
+      "status": 200,
+      "number_type": "int"
+    }
+  ],
+  "authenticated_writes_tested": false,
+  "notes": "仅验证官方接口定义和公开只读接口；未创建、评论、关闭任务或修改远程仓库。"
+}

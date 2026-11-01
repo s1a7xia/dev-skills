@@ -1,5 +1,5 @@
 {
-  "comment": "Trigger-routing query set for Level T. Split 60/40: guide description edits with TRAIN failures only; HOLDOUT is the headline accuracy. Never copy a failing query's keywords into a description (agentskills.io overfitting rule). Ported from docs/evals/trigger-eval.md 2026-08-22 round (P1-P6, N1-N6) + 8 new holdout queries.",
+  "comment": "Trigger-routing query set for Level T. Approximately 60/40 train/holdout: guide description edits with TRAIN failures only; HOLDOUT is the headline accuracy. Never copy a failing query's keywords into a description (agentskills.io overfitting rule). Original 20 queries plus 16 RuoYi profile boundary probes added 2026-10-31 (22 train / 14 holdout total).",
   "queries": [
     {"id": "P1", "split": "train", "kind": "should-trigger", "query": "帮我构思一下这个新功能该怎么做，需求还不太清楚，有好几种可能的做法", "expected": "think"},
     {"id": "P2", "split": "train", "kind": "should-trigger", "query": "这个方案行不行？帮我把计划里的坑都找出来，一个一个过", "expected": "grill"},
@@ -20,6 +20,22 @@
     {"id": "H5", "split": "holdout", "kind": "near-miss", "query": "run the existing test suite and tell me which tests fail", "expected": "NONE", "note": "just running tests; no unknown root cause, no new behavior to build"},
     {"id": "H6", "split": "holdout", "kind": "should-trigger", "query": "把这批需求整理成一组 issue，按依赖顺序排好，每张票都要能独立验收", "expected": "story"},
     {"id": "H7", "split": "holdout", "kind": "near-miss", "query": "auth 模块越积越乱，帮我整体审视一下架构健康度，列一份设计债务清单", "expected": "improve-architecture", "note": "global health scan, not a single bug or a ticket split"},
-    {"id": "H8", "split": "holdout", "kind": "should-trigger", "query": "A and B two caching libraries — build a minimal benchmark on our workload and tell me which one we should pick", "expected": "have-a-try"}
+    {"id": "H8", "split": "holdout", "kind": "should-trigger", "query": "A and B two caching libraries — build a minimal benchmark on our workload and tell me which one we should pick", "expected": "have-a-try"},
+    {"id": "P_RY1", "split": "train", "kind": "should-trigger", "query": "RuoYi-Vue-Plus 6.X 里新增订单查询接口，字段和验收标准已确定，按团队规范写 Controller、BO 和 VO", "expected": "ruoyi-plus-dev"},
+    {"id": "P_RY2", "split": "train", "kind": "should-trigger", "query": "在若依Plus的 plus-ui 中按既定接口做一个编辑弹窗，复用现有 hooks 和权限指令", "expected": "ruoyi-plus-dev"},
+    {"id": "P_RY3", "split": "train", "kind": "should-trigger", "query": "已确认是 RuoYi-Vue-Plus 6.X，按这份确定的字段清单编写建表和菜单权限 SQL", "expected": "ruoyi-plus-dev"},
+    {"id": "P_RY4", "split": "train", "kind": "should-trigger", "query": "Update the Entity/BO/VO mapping fields for this approved RuoYi-Vue-Plus change and compile the generated mapping code", "expected": "ruoyi-plus-dev"},
+    {"id": "P_RY5", "split": "train", "kind": "should-trigger", "query": "按若依编码规范修改当前 RuoYi-Vue-Plus 模块的分页接口，保持现有业务行为", "expected": "ruoyi-plus-dev"},
+    {"id": "N_RY1", "split": "train", "kind": "near-miss", "query": "原版 RuoYi Vue2 项目加一个简单按钮，不是 Plus 版本", "expected": "NONE"},
+    {"id": "N_RY2", "split": "train", "kind": "near-miss", "query": "普通 Spring Boot 和 Vue3 项目，按现有代码加一个简单查询，不用若依框架", "expected": "NONE"},
+    {"id": "N_RY3", "split": "train", "kind": "near-miss", "query": "若依Plus升级后这个接口崩溃了，帮我定位根因再修复", "expected": "debug"},
+    {"id": "N_RY4", "split": "train", "kind": "near-miss", "query": "这份 RuoYi-Vue-Plus PR 的 diff 已经写好了，请做合并前代码审查", "expected": "review"},
+    {"id": "N_RY5", "split": "train", "kind": "near-miss", "query": "想在若依Plus里加一套审批功能，需求还没想清楚，先讨论几种可行方案", "expected": "think"},
+    {"id": "H_RY_P1", "split": "holdout", "kind": "should-trigger", "query": "The project coding-standards selects ruoyi-plus-dev. Implement the already specified service method using the existing framework utilities", "expected": "ruoyi-plus-dev"},
+    {"id": "H_RY_P2", "split": "holdout", "kind": "should-trigger", "query": "RuoYi-Vue-Plus plus-ui 的 API 路径已定，请补 types.ts 和列表页分页调用", "expected": "ruoyi-plus-dev"},
+    {"id": "H_RY_P3", "split": "holdout", "kind": "should-trigger", "query": "为已经确定的 RuoYi-Vue-Plus 功能提供 sys_config 与 sys_dict 初始化脚本", "expected": "ruoyi-plus-dev"},
+    {"id": "H_RY_N1", "split": "holdout", "kind": "near-miss", "query": "这是个 Gitee 上的若依Plus项目，第一次使用工程技能，帮我配置任务追踪和编码规范入口", "expected": "setup-project"},
+    {"id": "H_RY_N2", "split": "holdout", "kind": "near-miss", "query": "解释一下 TypeScript 的 string | number 联合类型是什么意思", "expected": "NONE"},
+    {"id": "H_RY_N3", "split": "holdout", "kind": "near-miss", "query": "若依Plus这个功能的需求已确认，把 PRD 拆成可独立验收的 Gitee Issues", "expected": "story"}
   ]
 }

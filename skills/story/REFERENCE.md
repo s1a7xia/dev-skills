@@ -121,7 +121,7 @@ Before presenting, self-check the draft against the four quality questions — g
 
 ### Step 7: Publish Issues
 
-Read `docs/agents/issue-tracker.md` for the issue creation convention (e.g., `gh issue create`, `glab issue create`, or writing markdown files). Read `docs/agents/triage-labels.md` for the label mapping.
+Read `docs/agents/issue-tracker.md` for the issue creation convention (GitHub `gh`, GitLab `glab`, Gitee MCP/OpenAPI, or local markdown). Read `docs/agents/triage-labels.md` for the label mapping. Preserve string Issue numbers and full URLs; Gitee parent/dependency references follow its configured convention, not GitHub-only APIs.
 
 **Multi-repo:** If `repo-map.md` indicates issues should be created in a different repo, use that repo's issue tracker. Add `cross-repo` label (if configured) to issues touching multiple repos.
 

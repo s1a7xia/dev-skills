@@ -1,0 +1,9 @@
+{
+  "cli_version": "1.7.4",
+  "scope": "isolated project",
+  "units": 14,
+  "markdown_files": 55,
+  "source_bundle_installed_standard_identical": true,
+  "standard_sha256": "840b21d8a8b05cc139e5bdd4ac7ce877ed2a95deee3c01f5557c5ead68a1f74a",
+  "notes": "隔离安装测试；未修改真实用户技能安装目录。"
+}

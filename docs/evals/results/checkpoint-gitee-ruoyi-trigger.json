@@ -1,0 +1,35 @@
+{
+  "status": "incomplete",
+  "planned_queries": 36,
+  "planned_train": 22,
+  "planned_holdout": 14,
+  "catalog_file_delivery": "Two initial queries received inline catalog; later fresh agents read only an isolated frozen catalog file, without repo or expected answers.",
+  "confirmed_observations": [
+    {
+      "id": "P1",
+      "prediction": "think",
+      "evidence": "Evaluator progress message"
+    },
+    {
+      "id": "P2",
+      "prediction": "grill",
+      "evidence": "Evaluator progress message"
+    },
+    {
+      "id": "P3",
+      "prediction": "story",
+      "evidence": "Evaluator progress message"
+    },
+    {
+      "id": "P4",
+      "prediction": "debug",
+      "evidence": "Evaluator progress message"
+    },
+    {
+      "id": "N4",
+      "prediction": "write",
+      "evidence": "Completed fresh child: request is to improve the PRD prose, clarity, and wording before sharing."
+    }
+  ],
+  "limitation": "子代理运行触发账号使用额度限制，完整 T-Live 评估未完成；不据部分观测计算全量准确率。静态、工作流和 T-Proxy 评估另有独立记录。"
+}

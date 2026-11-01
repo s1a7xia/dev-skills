@@ -18,7 +18,7 @@ description: "Root cause analysis and systematic fix. Quick root cause location,
 
 ## Process Summary
 
-**Stage 0 (Context Setup)**: Apply the [Skill Entry Protocol](../rules/entry-protocol.md) — it locates and reads `CONTEXT.md`, ADRs, and PRDs for you. Domain vocabulary helps form accurate hypotheses.
+**Stage 0 (Context Setup)**: Apply the [Skill Entry Protocol](../rules/entry-protocol.md) and its [Standards Gate](../rules/entry-protocol.md#standards-gate) for applicable coding rules and verification. It also locates domain docs; domain vocabulary helps form accurate hypotheses.
 
 **Stage 1 (Quick Locate)**: Root cause analysis — form 1-2 hypotheses, validate, output one-sentence root cause. If quick validation fails (hypotheses refuted or none explains all symptoms), escalate to Stage 2.
 
